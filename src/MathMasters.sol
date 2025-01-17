@@ -38,6 +38,9 @@ library MathMasters {
         assembly {
             // Equivalent to `require(y == 0 || x <= type(uint256).max / y)`.
             if mul(y, gt(x, div(not(0), y))) {
+                // @audit - low: This will revert with a blank message
+                // @audit - why are you overriding the free memory pointer?
+                // @audit - low: Wrong function selector! 0xa56044f7
                 mstore(0x40, 0xbac65e5b) // `MathMasters__MulWadFailed()`.
                 revert(0x1c, 0x04)
             }
